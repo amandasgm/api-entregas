@@ -1,0 +1,73 @@
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ! Definindo as enums(opções) do banco de dados
+// Definindo as roles de usuários(OPÇÕES DE USUARIOS)
+enum UserRole {
+  client
+  sale
+}
+
+// Definindo os status de entrega(OPÇÕES DE STATUS)
+enum DeliveryStatus {
+  processing
+  shipped
+  delivered
+}
+
+// ! Definindo os modelos(tabelas) do banco de dados
+// 10.2.1 Tabela de usuários
+model User {
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  password String
+
+  role UserRole @default(client) // por padrao todo novo usuário é um client
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  deliveries Delivery[] // relacionamento com a tabela Delivery
+
+  @@map("users")
+}
+
+// 10.2.2 Tabela de entregas
+model Delivery {
+  id String @id @default(uuid())
+  userId String @map("user_id")
+  description String
+
+  status DeliveryStatus @default(processing) // por padrao toda nova entrega está com status processing
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id]) // relacionamento com a tabela User
+  logs DeliveryLog[] // relacionamento com a tabela DeliveryLog
+
+  @@map("deliveries")
+}
+
+// 10.2.3 Tabela de logs de entrega
+model DeliveryLog {
+  id String @id @default(uuid())
+  deliveryId String @map("delivery_id")
+  description String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  delivery Delivery @relation(fields: [deliveryId], references: [id]) // relacionamento com a tabela Delivery
+  @@map("delivery_logs")
+
+}
