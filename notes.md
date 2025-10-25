@@ -216,8 +216,6 @@ Gerenciador de exeções na aplicação
 
 ## Autenticação e Autorização 
 ### 16. Autenticação
-
-
 #### 16.1 Middleware de autenticação de token
 - Vai verificar se o usuário está autenticado antes de permitir o acesso a certas rotas.
 ![alt text](src/assets/middleware-autheticated.png)
@@ -282,3 +280,17 @@ Gerenciador de exeções na aplicação
   - 18.1.2 dentro de deliveries-routes.ts passamos o middleware de autorização **deliveriesRoutes.post("/", ensureAuthenticated, `verifyUserAuthorization(['sale'])`, deliveriesController.create);**
     - Dentro dele passamos o array de que tipo de role esta autorizada a entrar em URL com rotas /deliveries
     
+
+## Delivery
+### 18. Cadastrando entregas
+- 18.1 Metodo POST - CRIANDO
+  - 18.1.1 Validação de dados de entrada como sempre. Somente para reforçar, a entrada de dados é o formato e quantidade de caracteres que o campo vai receber. 
+  - 18.1.2 Criando o "delivery" no banco de dados. Logica para criar o delivery no banco de dados. Cada delivery vai estar associado a um usuario, pelo userId. O userId e o description sao colunas definidas no momento da criação da tabela `Delivery`. 
+    - a. Nesse momento de teste no insomnia, estamos com uma sessao de vendedor aberta, entramos no metodo post do delivery e abrimos manualmente um delivery no userId da usuaria Juliete
+
+- 18.2 Metodo GET - LISTANDO
+  - 18.2.1 `const deliveries = await prisma.delivery.findMany();`
+  - 18.2.2 criando a rota de get no deliveries-routes.ts
+    - a. no insomnia criamos o metodo get, pasamos o base_enviroment e o resource como URL, em seguida passamos no auth bearer o token de autorização e ai sim liberamos o metodo para listar os deliveries para o usuario da sessão de sale
+  - 18.2.3 incluindo alguns dados do usuario associado a entrega na listagem dos produtos
+    - a. ![alt text](src/assets/data-user-deliveries.png)
