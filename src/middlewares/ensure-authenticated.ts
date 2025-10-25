@@ -14,7 +14,7 @@ interface TokenPayload {
 }
 
 // 16.1.3 Middleware para garantir que o usuário está autenticado
-function ensureAuthenticated(request: Request, response: Response, next: NextFunction) {
+export function ensureAuthenticated(request: Request, response: Response, next: NextFunction) {
   try {
 
     // a. Verificar se o token está presente 

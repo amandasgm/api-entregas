@@ -1,7 +1,10 @@
 // 7.3 Centralizamos as rotas da aplicação aqui
 import { Router } from 'express';
+
 import { usersRoutes } from './users-routes';
 import { sessionsRoutes } from './sessions-routes';
+import { deliveriesRoutes } from './deliveries-routes';
+
 
 const router = Router();
 
@@ -11,6 +14,7 @@ router.use('/users', usersRoutes);
 // ! Rotas de sessões
 router.use('/sessions', sessionsRoutes);
 
-// Podemos adicionar mais rotas aqui, como productsRoutes, ordersRoutes, etc.
+// ! Rotas de entregas
+router.use('/deliveries', deliveriesRoutes);
 
 export { router };

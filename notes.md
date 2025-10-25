@@ -216,6 +216,8 @@ Gerenciador de exeções na aplicação
 
 ## Autenticação e Autorização 
 ### 16. Autenticação
+
+
 #### 16.1 Middleware de autenticação de token
 - Vai verificar se o usuário está autenticado antes de permitir o acesso a certas rotas.
 ![alt text](src/assets/middleware-autheticated.png)
@@ -261,3 +263,22 @@ Gerenciador de exeções na aplicação
 
 
 
+#### 17. Deliveries
+- 17.1 Criando controller e o arquivo base com metodo post
+  ##### No insomnia: 
+    - 1. Criamos a pasta de Deliveries
+    - 2. Criamos o metodo post
+    - 3. definimos o enviroment - sempre
+    - 4. em "auth" habilitamos a utilização do token e fazemos a requisição pegar automaticamente o valor correspondente para retornar
+    ![alt text](src/assets/insomnia-token-automatic.png)
+      - **o token precisa vir do metodo post onde ele foi criado**
+
+- 17.2 Criando a rota
+  - 17.2.1 na rota adicionamos o `ensureAuthenticated` para usuarios autenticados
+
+  ### 18. Autorização
+  Vamos verificar se o usuario tem autorização para consultar oq ele esta tentando consultar 
+  - 18.1.1 `verify-user-authorization.ts`
+  - 18.1.2 dentro de deliveries-routes.ts passamos o middleware de autorização **deliveriesRoutes.post("/", ensureAuthenticated, `verifyUserAuthorization(['sale'])`, deliveriesController.create);**
+    - Dentro dele passamos o array de que tipo de role esta autorizada a entrar em URL com rotas /deliveries
+    
