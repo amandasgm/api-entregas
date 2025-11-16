@@ -20,7 +20,7 @@ class SessionControllers {
 
     // 14.1.3 Validação: "caso nao tenha nenhum usuário com esse email"
     if (!user) {
-      throw new AppError("Email ou senha inválidos", 401);
+      throw new AppError("Email ou senha inválidos");
     }
 
     // 14.1.4 Comparação da senha fornecida com a senha armazenada no banco de dados
@@ -28,7 +28,7 @@ class SessionControllers {
 
     // 14.1.4.1 caso a senha não corresponda
     if (!passwordMatches) {
-      throw new AppError("Email ou senha inválidos", 401);
+      throw new AppError("Email ou senha inválidos");
     }
 
     // 15.2 Gerando o token de autenticação JWT
