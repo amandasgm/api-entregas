@@ -294,3 +294,95 @@ Gerenciador de exeções na aplicação
     - a. no insomnia criamos o metodo get, pasamos o base_enviroment e o resource como URL, em seguida passamos no auth bearer o token de autorização e ai sim liberamos o metodo para listar os deliveries para o usuario da sessão de sale
   - 18.2.3 incluindo alguns dados do usuario associado a entrega na listagem dos produtos
     - a. ![alt text](src/assets/data-user-deliveries.png)
+
+### 19. Status do pedido
+- 19.1 validação de dados de entrada e validação de body
+- 19.2 Logica para atualizar o status da entrega no banco de dados
+  - ![alt text](src/assets/stauts.png)
+  - 19.2.1 no insomnia criamos o metodo de patch - atualizar
+- 19.3 passando o controller para o routes de deliveries com o :id do delivery como parametro da url
+  - `deliveriesRoutes.patch("/:id/status", deliveriesStatusController.update);`
+
+### 20. Log de Entregas
+Logs de entrega, permitindo adicionar informações sobre o status de envios
+- 20.1 CREATING  
+  - **UMA COISA BEM CLARA QUE EU SO ENTENDI AGORA:**
+    - const { deliveryId, message } = request.body; => ISSO AQUI VEM DO CORPO:
+    - ![alt text](src/assets/body-request.png)
+  - 20.1.1 passando a rota para o delivery-logs-routes.ts
+    - queremos dar acesso apenas ao vendedor para CRIAR a menssagem de log 
+    - mas queremos dar acesso ao cliente para VISUALIZAR a menssagem de log
+  - 20.1.2 passando o delivery-logs-routes.ts para o index.ts
+  - 20.1.3 criando a rota no insomnia
+
+  - 20.1.4 CRIANDO A LOGICA
+    - a. validação de dados de entrada
+    - b. findUnique() => buscar um único registro no banco de dados com base em um campo que seja único — normalmente o id, email ou qualquer outro campo marcado com @unique no schema.
+    - c. verifica se a entrega existe
+    - d. verifica se o status é processing, se for, nao tem como ter logs de envios porque ainda esta processando, os logs veem apartir do shipped
+    - e. ai cria o log
+
+- 20.2 SHOWING
+  - mostrando os logs de envio para o usuario
+  - a. validaçao de dados
+  - b. busca um unico registo ONDE o id seja igual ao delivery_id
+  - c. Verifica se o usuário é um cliente e se ele é o proprietário da entrega
+  - d. mostra todos os logs da entrega para o usuario
+
+- 20.3 CONDIÇÃO: se um pedido ja foi entregue, ele não pode receber novos logs
+    
+- 20.4 Registrando no Log Alteração do Status
+
+## JEST - Testes Automatizados
+- 21. instalação e configuração
+  - jest: `npm i jest @types/jest ts-jest -D`
+  - supertest: `npm i supertest@7.0.0 @types/supertest@6.0.2 -D`
+  - ts-node: `npm i ts-node -D`
+
+  - 21.1 Configurando jest
+    - `npx jest --init`
+    - respondemos algumas perguntas de configuração
+    - configuramos o arquivo que foi criado: **jest.config.ts** 
+      ![alt text](src/assets/jest-config.png)
+    - package.json: criando o script => `"test": "NODE_OPTIONS='--experimental-vm-modules' jest --watchAll --runInBand"`
+
+  
+- 22. TESTES => src/tests
+- TEST: Rodar testes e validar lógica do código
+- SUPERTEST: Com Supertest você testa rotas/requests/respostas da API. Ele simula requisições HTTP sem precisar de Postman ou servidor externo.
+  
+  - 22.1 criando o supertest para o user-controller: **user-controller.test.ts**
+    - a. teste de criação de usuario: ele vai criar um novo usuario de exemplo para poder fazer o teste
+    - `const response = await request(app).post("/users").send...`
+    - ![alt text](src/assets/test-expli.png)
+
+      - 22.1.1 limpando o usuario de exemplo depois de ter executado todos os testes
+
+      ### TESTES
+      - 22.1.2 teste de erro para emails duplicados
+      - 22.1.3 teste para email digitado de forma errada
+
+  - 22.2 criando o supertest para a autenticação da sessao: session-controller
+    - 22.2.1 ANTES de todos os testes: cria um usuário para testar a sessão
+    - 22.2.2 DEPOIS de todos os testes, deletamos o usuario 
+
+    ### TESTES
+    - 22.2.3 Teste de criação de sessao
+
+- OS TESTES SAO BEM REPETITIVOS, ENTÃO NAO APLICAMOS TESTES PARA TUDO NESSE PROJETO
+
+
+
+# AO LONGO DO DESENVOLVIMENTO
+
+## PROBLEMA AO INICIAR PROJETO 
+### CAUSA 1: DOCKER DESCONECTADO
+Desligou o computador e o docker fechou sozinha
+1. abra o aplicativo do docker
+2. rode `docker compose up -d`
+3. depois rode todos os outros scripts:
+  a. npm run dev
+  b. npx prisma studio
+  c. npm run test
+
+
