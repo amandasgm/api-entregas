@@ -22,7 +22,7 @@ class UsersController {
     // 13.1 verificar se o email já existe no banco de dados
     const userWithSameEmail = await prisma.user.findFirst({ where: { email } }); 
     if (userWithSameEmail) {
-      throw new AppError('Este email já está em uso.', 409);
+      throw new AppError('Este email já está em uso.');
     }
 
     // 11.2.2 Criptografar a senha antes de salvar no banco de dados
@@ -40,7 +40,7 @@ class UsersController {
     // 13.2.1 Retornar o usuário criado (sem a senha)
     const { password: _, ...userWithoutPassword } = user;
 
-    return response.json(userWithoutPassword);
+    return response.status(201).json(userWithoutPassword);
   }
 }
 
