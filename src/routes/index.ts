@@ -4,6 +4,7 @@ import { Router } from 'express';
 import { usersRoutes } from './users-routes';
 import { sessionsRoutes } from './sessions-routes';
 import { deliveriesRoutes } from './deliveries-routes';
+import { deliveryLogsRoutes } from './delivery-logs-routes';
 
 
 const router = Router();
@@ -16,5 +17,8 @@ router.use('/sessions', sessionsRoutes);
 
 // ! Rotas de entregas
 router.use('/deliveries', deliveriesRoutes);
+
+// ! Rotas de logs de entregas
+router.use('/delivery-logs', deliveryLogsRoutes);
 
 export { router };
