@@ -1,6 +1,8 @@
 # API DE ENTREGAS - ROCKETLOG
 A API terá perfis de vendedor e cliente, com níveis de acesso definidos. Vamos implementar o envio de pedidos, gerenciar status como "processando", "enviado" e "entregue", e registrar as movimentações da entrega. Isso permitirá que os usuários acompanhem o status de suas entregas em tempo real.
 
+- ![alt text](src/assets/fluxo-mental.jpg)
+
 ## Criando o projeto
 ### 1. package.json
   -  `npm init -y` 
